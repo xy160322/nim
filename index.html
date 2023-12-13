@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nim Game</title>
+    <style>
+        .tg  {border-collapse:collapse;border-spacing:0;}
+    .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+      overflow:hidden;padding:30px 14px;word-break:normal;}
+    .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+      font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+    </style>
+</head >
+<body onload="init()">
+    <table class="tg">
+        <tbody>
+          <tr></tr>
+          <tr></tr>
+          <tr></tr>
+          <tr></tr>
+        </tbody>
+        <script>
+        for(var j=0;j<3;j++){
+            var ct=document.getElementsByTagName("tr")[j];
+            for(var i=0;i<31;i++){
+                var td=document.createElement("td");
+                td.className=`tg-${j}${i}`
+                const jj=j;
+                const ii=i;
+                td.onclick=(e)=>{ g(jj,ii)};
+                ct.appendChild(td);
+            }
+        }
+        var j=3;
+        var ct=document.getElementsByTagName("tr")[j];
+        for(var i=0;i<31;i++){
+            var td=document.createElement("td");
+            td.className=`tg-${j}${i}`
+            const jj=j;
+            const ii=i;
+            td.onclick=(e)=>{ g(jj,ii)};
+            td.textContent=i+1
+            ct.appendChild(td);
+        }
+        </script>
+        </table>
+        <br></br>
+<button onclick="init()">新游戏</button>
+<br></br>
+<p id="txt">轮到你先行动</p>
+<p id="heap"></p>
+<!-- <button onclick="ai()">AI行动</button> -->
+<script>
+    var a=Array(0,0,0);
+    function init(){ 
+        a[0]=parseInt(Math.random()*30)+1;
+        a[1]=parseInt(Math.random()*30)+1;
+        a[2]=parseInt(Math.random()*30)+1;
+        const hp=document.getElementById("heap")
+        hp.textContent=`三堆石子数分别为：${a[0]} ${a[1]} ${a[2]}`
+        for(var j=0;j<3;j++){
+            for(var i=0;i<30;i++){
+                const e=document.getElementsByClassName(`tg-${j}${i}`)[0];
+                if(i<a[j]) e.style.backgroundColor="orange";
+                else e.style.backgroundColor="white";
+            }
+        }
+    }
+    function randmove(){
+        for(var i=0;i<3;i++){
+            if(a[i]>0){
+                const tmp=parseInt(Math.random()*a[i]);
+                f(i,tmp);
+                break;
+            }
+        }
+    }
+    function g(j,i){
+        f(j,i);
+        const t=document.getElementById("txt")
+        
+        console.log(a[0],a[1],a[2]);
+        setTimeout(ai,300);
+        
+    }
+    function ai(){
+        if((a[0]^a[1]^a[2])==0){
+            randmove();
+        }
+        else{
+            const x=a[0]^a[1]^a[2];
+            for(var i=0;i<3;i++){
+                if((x^a[i])<a[i]){
+                    f(i,x^a[i]);
+                    break
+                }
+            }
+        }
+        const t=document.getElementById("txt")
+        t.textContent="你行动……"
+        const hp=document.getElementById("heap")
+        hp.textContent=`三堆石子数分别为：${a[0]} ${a[1]} ${a[2]}`
+        if(a[0]+a[1]+a[2]==0){
+            t.textContent="你无子可拿，你输啦";
+            return;
+        }
+    }
+    function f(j,i){
+        console.log(j)
+        console.log(i)
+        const tmp=document.getElementsByClassName(`tg-${j}${i}`)[0];
+        if (tmp.style.backgroundColor=="white") return false;
+        for(var k=a[j]-1;k>=i;k--) {
+            const t=document.getElementsByClassName(`tg-${j}${k}`)[0];
+            t.style.backgroundColor="white";
+        }
+        a[j]=i;
+        const t=document.getElementById("txt")
+        t.textContent="AI行动……"
+        const hp=document.getElementById("heap")
+        hp.textContent=`三堆石子数分别为：${a[0]} ${a[1]} ${a[2]}`
+        if(a[0]+a[1]+a[2]==0){
+            t.textContent="AI无子可拿，你赢啦";
+            return;
+        }
+    }
+    
+</script>
+
+</body>
+</html>
