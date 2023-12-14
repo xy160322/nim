@@ -77,10 +77,15 @@
         }
     }
     function g(j,i){
+        const tmp=document.getElementsByClassName(`tg-${j}${i}`)[0];
+        if (tmp.style.backgroundColor=="white") return ;
         f(j,i);
+        if(a[0]+a[1]+a[2]==0){
+            t.textContent="AI无子可拿，你赢啦";
+        }
+        console.log(a[0],a[1],a[2]);
         const t=document.getElementById("txt")
         
-        console.log(a[0],a[1],a[2]);
         setTimeout(ai,300);
         
     }
@@ -122,7 +127,6 @@
         hp.textContent=`三堆石子数分别为：${a[0]} ${a[1]} ${a[2]}`
         if(a[0]+a[1]+a[2]==0){
             t.textContent="AI无子可拿，你赢啦";
-            return;
         }
     }
     
